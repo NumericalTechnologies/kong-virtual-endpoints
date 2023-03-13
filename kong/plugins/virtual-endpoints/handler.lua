@@ -1,4 +1,4 @@
--- Inspired by https://github.com/NumericalTechnologies/kong-service-virtualization
+-- Inspired by https://github.com/Optum/kong-service-virtualization
 local access = require("kong.plugins.virtual-endpoints.access")
 local KongServiceVirtualizationHandler = {}
 

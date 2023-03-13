@@ -1,4 +1,4 @@
--- Inspired by https://github.com/NumericalTechnologies/kong-service-virtualization
+-- Inspired by https://github.com/Optum/kong-service-virtualization
 local _M = {}
 local resty_sha256 = require "resty.sha256"
 local str = require "resty.string"

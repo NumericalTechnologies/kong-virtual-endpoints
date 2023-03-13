@@ -1,4 +1,4 @@
--- Inspired by https://github.com/NumericalTechnologies/kong-service-virtualization
+-- Inspired by https://github.com/Optum/kong-service-virtualization
 local typedefs = require "kong.db.schema.typedefs"
 
 return {
