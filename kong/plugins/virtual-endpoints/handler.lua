@@ -1,12 +1,12 @@
 -- Inspired by https://github.com/Optum/kong-service-virtualization
 local access = require("kong.plugins.virtual-endpoints.access")
-local KongServiceVirtualizationHandler = {}
+local KongVirtualEndpointsHandler = {
+  VERSION = "1.0.0",
+  PRIORITY = 3000,
+}
 
-KongServiceVirtualizationHandler.PRIORITY = 3000 --Execute before logging plugins and such as to not impact their real metrics
-KongServiceVirtualizationHandler.VERSION = "0.3"
-
-function KongServiceVirtualizationHandler:access(conf)
-  access.execute(conf)
+function KongVirtualEndpointsHandler:access(config)
+  access.execute(config)
 end
 
-return KongServiceVirtualizationHandler
+return KongVirtualEndpointsHandler
