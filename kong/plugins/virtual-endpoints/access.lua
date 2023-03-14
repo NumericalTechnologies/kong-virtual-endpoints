@@ -20,6 +20,8 @@ local function respond_virtually(response_config)
     return kong.response.exit(500, { message = "config.data or config.file_path must be defined." })
   end
 
+  ngx.header["Content-Type"] = response_config.content_type
+
   if (response_config.data) then
     ngx.print(response_config.data)
   end
@@ -27,7 +29,7 @@ local function respond_virtually(response_config)
   if (response_config.file_path) then
     local file = io.open(response_config.file_path, "rb")
     if (file == nil) then
-      return kong.response.exit(500, { message = "Cannot find file at" .. response_config.file_path })
+      return kong.response.exit(500, { message = "Cannot find file at " .. response_config.file_path })
     end
 
     local eight_kilobytes = 2^13
@@ -38,7 +40,6 @@ local function respond_virtually(response_config)
     end
   end
 
-  ngx.header["Content-Type"] = response_config.content_type
   ngx.exit(response_config.status_code)
 end
 
