@@ -5,7 +5,8 @@ local response_schema = Schema.define {
   fields = {
     { status_code = { type = "number", default = 200 } },
     { content_type = { type = "string", default = "application/json" } },
-    { data = { type = "string" } }
+    { data = { type = "string" } },
+    { file_path = { type = "string" } }
   }
 }
 

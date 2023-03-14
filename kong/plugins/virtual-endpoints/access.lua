@@ -16,8 +16,29 @@ local function array_contains(array, value_to_find)
 end
 
 local function respond_virtually(response_config)
+  if (response_config.data == nil and response_config.file_path == nil) then
+    return kong.response.exit(500, { message = "config.data or config.file_path must be defined." })
+  end
+
+  if (response_config.data) then
+    ngx.print(response_config.data)
+  end
+
+  if (response_config.file_path) then
+    local file = io.open(response_config.file_path, "rb")
+    if (file == nil) then
+      return kong.response.exit(500, { message = "Cannot find file at" .. response_config.file_path })
+    end
+
+    local eight_kilobytes = 2^13
+    while true do
+      local line = file:read(eight_kilobytes)
+      if line == nil then break end
+      ngx.print(line)
+    end
+  end
+
   ngx.header["Content-Type"] = response_config.content_type
-  ngx.print(response_config.data)
   ngx.exit(response_config.status_code)
 end
 
