@@ -23,24 +23,20 @@ local function respond_virtually(response_config)
   ngx.header["Content-Type"] = response_config.content_type
 
   if (response_config.data) then
-    ngx.print(response_config.data)
-  end
-
-  if (response_config.file_path) then
+    return kong.response.exit(response_config.status_code, response_config.data, {['Content-Type'] = response_config.content_type})
+  elseif (response_config.file_path) then
     local file = io.open(response_config.file_path, "rb")
     if (file == nil) then
       return kong.response.exit(500, { message = "Cannot find file at " .. response_config.file_path })
     end
 
-    local eight_kilobytes = 2^13
-    while true do
-      local line = file:read(eight_kilobytes)
-      if line == nil then break end
-      ngx.print(line)
-    end
-  end
+    local current = file:seek()      -- get current position
+    local size = file:seek("end")    -- get file size
+    file:seek("set", current)        -- restore position
 
-  ngx.exit(response_config.status_code)
+    local data = file:read("*all")
+    return kong.response.exit(response_config.status_code, data, {['Content-Type'] = response_config.content_type, ['Content-Length'] = size})
+  end
 end
 
 function _M.execute(config)
