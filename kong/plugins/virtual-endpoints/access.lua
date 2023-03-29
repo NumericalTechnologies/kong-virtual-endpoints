@@ -20,8 +20,6 @@ local function respond_virtually(response_config)
     return kong.response.exit(500, { message = "config.data or config.file_path must be defined." })
   end
 
-  ngx.header["Content-Type"] = response_config.content_type
-
   if (response_config.data) then
     return kong.response.exit(response_config.status_code, response_config.data, {['Content-Type'] = response_config.content_type})
   elseif (response_config.file_path) then
