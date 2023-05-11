@@ -1,11 +1,47 @@
 -- Inspired by https://github.com/Optum/kong-service-virtualization
+local Schema = require "kong.db.schema"
 local typedefs = require "kong.db.schema.typedefs"
-local config_scheme = require("kong.plugins.virtual-endpoints.typedefs.config")
+
+local request_schema = Schema.define {
+  type = "record",
+  fields = {
+    { methods = { type = "array", elements = { type = "string" }, default = { "*" } } },
+  }
+}
+
+local response_schema = Schema.define {
+  type = "record",
+  fields = {
+    { status_code = { type = "number", default = 200 } },
+    { content_type = { type = "string", default = "application/json" } },
+    { data = { type = "string" } },
+    { file_path = { type = "string" } }
+  }
+}
+
+local config_schema = Schema.define {
+  type = "record",
+  fields = {
+    {
+      endpoints = {
+        type = "array",
+        elements = {
+          type = "record",
+          fields = {
+            { request = request_schema },
+            { response = response_schema }
+          }
+        },
+        required = true
+      }
+    }
+  },
+}
 
 return {
   name = "kong-virtual-endpoints",
   fields = {
     { protocols = typedefs.protocols_http },
-    { config = config_scheme }
+    { config = config_schema }
   },
 }
