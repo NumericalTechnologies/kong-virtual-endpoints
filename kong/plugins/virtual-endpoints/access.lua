@@ -30,8 +30,8 @@ local function respond_with_file(file_path, status_code, content_type)
 end
 
 local function respond_virtually(response_config)
-  if (response_config.data == nil and response_config.file_path == nil) then
-    return kong.response.exit(500, { message = "config.data or config.file_path must be defined." })
+  if (response_config.data == nil and response_config.file_path == nil and response_config.file_match == nil) then
+    return kong.response.exit(500, { message = "config.data or config.file_path or config.file_match must be defined." })
   end
 
   if (response_config.data) then
