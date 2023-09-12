@@ -15,7 +15,16 @@ local response_schema = Schema.define {
     { status_code = { type = "number", default = 200 } },
     { content_type = { type = "string", default = "application/json" } },
     { data = { type = "string" } },
-    { file_path = { type = "string" } }
+    { file_path = { type = "string" } },
+    { 
+      file_match = {
+        type = "record",
+        fields = {
+          { request_path_prefix_to_remove = { type = "string" } },
+          { target_path_prefix_to_add = { type = "string" } },
+        }
+      }
+    }
   }
 }
 
